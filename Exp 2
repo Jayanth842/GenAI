@@ -1,0 +1,60 @@
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+
+from sklearn.decomposition import PCA
+
+import numpy as np
+
+import spacy
+
+# Load spaCy's pre-trained model
+
+nlp = spacy.load("en_core_web_md")
+
+# Select 10 words from the "Technology" domain
+
+tech_words = ["computer", "internet", "software", "hardware", "network", 
+
+              "AI", "cloud", "cybersecurity", "database", "robotics"]
+
+# Extract word vectors
+
+word_vectors = np.array([nlp(word).vector for word in tech_words])
+
+# Apply PCA for 2D visualization
+
+pca_result = PCA(n_components=2).fit_transform(word_vectors)
+
+# Improved Visualization
+
+plt.figure(figsize=(10, 6))  # Increase figure size
+
+sns.scatterplot(x=pca_result[:, 0], y=pca_result[:, 1], s=100, color="blue")
+
+# Annotate words clearly
+
+for i, word in enumerate(tech_words):
+
+    plt.annotate(word, (pca_result[i, 0], pca_result[i, 1]), 
+
+
+19
+
+
+
+                 fontsize=12, xytext=(5,5), textcoords="offset points", 
+
+                 bbox=dict(facecolor='white', alpha=0.7))  # Avoid overlap
+
+# Add title, labels, and grid
+
+plt.title("PCA Visualization of Word Embeddings", fontsize=14)
+
+plt.xlabel("Principal Component 1", fontsize=12)
+
+plt.ylabel("Principal Component 2", fontsize=12)
+
+plt.grid(True, linestyle="--", alpha=0.5)  # Light grid for clarity
+
+plt.show()
